@@ -8,17 +8,10 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject var viewModel = PlayerViewModel() // ✅ @StateObject olarak tanımlandı
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
+        PlayerListView(viewModel: viewModel) // ✅ Parametre olarak geçirildi
     }
 }
 
-#Preview {
-    ContentView()
-}
