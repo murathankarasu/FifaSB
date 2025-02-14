@@ -48,9 +48,9 @@ class PlayerViewModel: ObservableObject {
                 let averageRating = ratings.isEmpty ? 0 : Int(ratings.reduce(0, +) / Double(ratings.count))
 
                 let player = Player(
-                    name: normalizeText(columns[safe: 0]),   // Oyuncu adı
-                    country: normalizeText(columns[safe: 1]), // Ülke
-                    club: normalizeText(columns[safe: 5]),   // Kulüp
+                    name: normalizeText(columns[safe: 0] ?? ""),   // Oyuncu adı
+                    country: normalizeText(columns[safe: 1] ?? ""), // Ülke
+                    club: normalizeText(columns[safe: 5] ?? ""),   // Kulüp
                     age: Int(columns[safe: 4] ?? "0") ?? 0, // Yaş
                     value: columns[safe: 40] ?? "",
                     rating: averageRating,
@@ -77,4 +77,10 @@ class PlayerViewModel: ObservableObject {
     }
 }
 
+// ✅ **Array içinde güvenli erişim (index out of bounds hatasını önler)**
+extension Array {
+    subscript(safe index: Int) -> Element? {
+        return indices.contains(index) ? self[index] : nil
+    }
+}
 

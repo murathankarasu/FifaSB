@@ -3,56 +3,98 @@ import SwiftUI
 struct PlayerListView: View {
     @ObservedObject var viewModel: PlayerViewModel
     @State private var selectedPlayer: Player?
-    @State private var sortByRating = false
-
-    var sortedPlayers: [Player] {
-        sortByRating ? viewModel.filteredPlayers.sorted { $0.rating > $1.rating } : viewModel.filteredPlayers
-    }
+    @State private var isButtonPressed = false  // Buton basılınca renk değişimi için
 
     var body: some View {
         VStack {
-            TextField("Oyuncu Ara", text: $viewModel.searchText)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding()
-            
-            Toggle("Rating'e göre sırala", isOn: $sortByRating)
-                .padding()
-            
-            if !viewModel.searchText.isEmpty {
-                List(sortedPlayers) { player in
-                    HStack {
-                        Text("\(player.name) - Rating: \(player.rating)")
-                        Spacer()
-                        Button(action: { viewModel.addPlayerToSelection(player: player) }) {
-                            Text("Ekle")
-                                .foregroundColor(.white)
-                                .padding(.horizontal, 10)
-                                .padding(.vertical, 5)
-                                .background(Color.green)
-                                .cornerRadius(8)
+            // Üstte "FifaSB" Başlığı
+            Text("FifaSB")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+                .foregroundColor(.green)
+                .padding(.top, 20)
+
+            HStack {
+                // Sol Taraf: Arama Alanı ve Oyuncu Listesi
+                VStack(alignment: .leading) {
+                    TextField("Oyuncu Ara", text: $viewModel.searchText)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .padding()
+                        .foregroundColor(.white)
+                        .background(Color.gray.opacity(0.2))
+                        .cornerRadius(10)
+                        .frame(width: 250)
+
+                    if !viewModel.searchText.isEmpty {
+                        List(viewModel.filteredPlayers) { player in
+                            HStack {
+                                Text(player.name)
+                                    .foregroundColor(.white)
+
+                                Spacer()
+
+                                Button(action: { viewModel.addPlayerToSelection(player: player) }) {
+                                    Text("Ekle")
+                                        .foregroundColor(.white)
+                                        .padding(.horizontal, 10)
+                                        .padding(.vertical, 5)
+                                        .background(Color.green)
+                                        .cornerRadius(8)
+                                }
+                            }
+                            .listRowBackground(Color.black)
                         }
+                        .frame(width: 250, height: 400)
                     }
                 }
-            }
-            
-            if !viewModel.selectedPlayers.isEmpty {
-                Text("Seçilen Oyuncular").font(.headline).padding()
-                List(viewModel.selectedPlayers) { player in
-                    Text(player.name).onTapGesture {
-                        selectedPlayer = player
+                
+                Spacer()
+
+                // Sağ Taraf: Seçilen Oyuncular Listesi
+                VStack(alignment: .leading) {
+                    Text("Seçilen Oyuncular")
+                        .font(.headline)
+                        .foregroundColor(.green)
+                        .padding(.bottom, 10)
+
+                    List(viewModel.selectedPlayers) { player in
+                        HStack {
+                            Text(player.name)
+                                .foregroundColor(.white)
+                                .onTapGesture {
+                                    selectedPlayer = player
+                                }
+
+                            Spacer()
+
+                            Button(action: { removePlayer(player) }) {
+                                Image(systemName: "trash")
+                                    .foregroundColor(.red)
+                            }
+                        }
+                        .listRowBackground(Color.black)
                     }
+                    .frame(width: 250, height: 400)
                 }
             }
-            
+            .padding()
+
             Spacer()
-            
-            Button(action: { viewModel.navigateToFormationScreen = true }) {
+
+            // Dizilişe Yerleştir Butonu
+            Button(action: {
+                isButtonPressed = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    isButtonPressed = false
+                    viewModel.navigateToFormationScreen = true
+                }
+            }) {
                 Text("Dizilişe Yerleştir")
                     .font(.headline)
                     .foregroundColor(.white)
                     .padding()
                     .frame(maxWidth: .infinity)
-                    .background(Color.green)
+                    .background(isButtonPressed ? Color.green.opacity(0.6) : Color.green)
                     .cornerRadius(10)
                     .padding(.horizontal, 20)
             }
@@ -61,8 +103,15 @@ struct PlayerListView: View {
                 FormationView(players: viewModel.selectedPlayers)
             }
         }
+        .background(Color.black.ignoresSafeArea())
         .sheet(item: $selectedPlayer) { player in
             PlayerDetailView(player: player)
         }
     }
+
+    /// Seçilen oyuncular listesinden oyuncu çıkarmak için fonksiyon
+    private func removePlayer(_ player: Player) {
+        viewModel.selectedPlayers.removeAll { $0.id == player.id }
+    }
 }
+
