@@ -1,9 +1,8 @@
 import SwiftUI
 
 struct PlayerListView: View {
-    @ObservedObject var viewModel: PlayerViewModel // ✅ Dışarıdan alıyor
+    @ObservedObject var viewModel: PlayerViewModel
     @State private var selectedPlayer: Player?
-    @State private var showDetail = false
     @State private var sortByRating = false
 
     var sortedPlayers: [Player] {
@@ -12,24 +11,19 @@ struct PlayerListView: View {
 
     var body: some View {
         VStack {
-            // Arama Çubuğu
             TextField("Oyuncu Ara", text: $viewModel.searchText)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding()
-
-            // Sıralama Toggle
+            
             Toggle("Rating'e göre sırala", isOn: $sortByRating)
                 .padding()
-
-            // Oyuncu Listesi
+            
             if !viewModel.searchText.isEmpty {
                 List(sortedPlayers) { player in
                     HStack {
                         Text("\(player.name) - Rating: \(player.rating)")
                         Spacer()
-                        Button(action: {
-                            viewModel.addPlayerToSelection(player: player)
-                        }) {
+                        Button(action: { viewModel.addPlayerToSelection(player: player) }) {
                             Text("Ekle")
                                 .foregroundColor(.white)
                                 .padding(.horizontal, 10)
@@ -40,30 +34,19 @@ struct PlayerListView: View {
                     }
                 }
             }
-
-            // Seçilen Oyuncular Listesi
+            
             if !viewModel.selectedPlayers.isEmpty {
-                Text("Seçilen Oyuncular")
-                    .font(.headline)
-                    .padding()
-
+                Text("Seçilen Oyuncular").font(.headline).padding()
                 List(viewModel.selectedPlayers) { player in
-                    HStack {
-                        Text(player.name)
-                            .onTapGesture {
-                                selectedPlayer = player
-                                showDetail = true
-                            }
+                    Text(player.name).onTapGesture {
+                        selectedPlayer = player
                     }
                 }
             }
-
+            
             Spacer()
-
-            // Dizilişe Yerleştir Butonu
-            Button(action: {
-                $viewModel.navigateToFormationScreen = true
-            }) {
+            
+            Button(action: { viewModel.navigateToFormationScreen = true }) {
                 Text("Dizilişe Yerleştir")
                     .font(.headline)
                     .foregroundColor(.white)
@@ -83,4 +66,3 @@ struct PlayerListView: View {
         }
     }
 }
-
