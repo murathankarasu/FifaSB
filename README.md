@@ -17,15 +17,13 @@ FifaSB is a **SwiftUI-based** mobile application that allows you to **search for
 
 ## 📸 Screenshots
 
-| **Player Search**  | **Player Details** | **Formation Screen** |
-|-------------------|------------------|------------------|
-| <img width="1015" alt="Ekran Resmi 2025-02-14 12 14 18" src="https://github.com/user-attachments/assets/9508bc67-b2a4-4d08-93bc-c9800869471c" />
-|<img width="1015" alt="Ekran Resmi 2025-02-14 11 55 53" src="https://github.com/user-attachments/assets/b53eb10d-388f-4449-8be7-00ac355ad78a" />
-|<img width="1015" alt="Ekran Resmi 2025-02-14 11 55 35" src="https://github.com/user-attachments/assets/4828bee6-fb40-485c-9b43-5b27f029c6a9" />
-|
-Open Xcode and select the project.
-Choose your device or simulator.
-Click "Run" to start the application.
+<img width="1015" alt="Ekran Resmi 2025-02-14 12 14 18" src="https://github.com/user-attachments/assets/9508bc67-b2a4-4d08-93bc-c9800869471c" />
+<img width="1015" alt="Ekran Resmi 2025-02-14 11 55 53" src="https://github.com/user-attachments/assets/b53eb10d-388f-4449-8be7-00ac355ad78a" />
+<img width="1015" alt="Ekran Resmi 2025-02-14 11 55 35" src="https://github.com/user-attachments/assets/4828bee6-fb40-485c-9b43-5b27f029c6a9" />
+
+- Open Xcode and select the project.
+- Choose your device or simulator.
+- Click "Run" to start the application.
 
 ---
 
